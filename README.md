@@ -10,14 +10,13 @@ Project is to demostrate a Model Predictive Control in Car simulator, where car 
 
 The vehicle model used in this project is same as introduced in the class which is a bicyle model. It neglects all dynamical effects such as inertia, friction and torque. The model takes changes of heading direction into account and is thus non-linear. The model used consists of the following equations
 
-      '''
-      // x_[t+1] = x[t] + v[t] * cos(psi[t]) * dt
+      '''// x_[t+1] = x[t] + v[t] * cos(psi[t]) * dt
       // y_[t+1] = y[t] + v[t] * sin(psi[t]) * dt
       // psi_[t+1] = psi[t] + v[t] / Lf * delta[t] * dt
       // v_[t+1] = v[t] + a[t] * dt
       // cte[t+1] = f(x[t]) - y[t] + v[t] * sin(epsi[t]) * dt
-      // epsi[t+1] = psi[t] - psides[t] + v[t] * delta[t] / Lf * dt
-      '''
+      // epsi[t+1] = psi[t] - psides[t] + v[t] * delta[t] / Lf * dt'''
+
 Here, x,y denote the position of the car, psi the heading direction, v its velocity cte the cross-track error and epsi the orientation error. Model overall contains SIX variables. Where actuation variables are TWO:  the sterring and the trottle.
 
 ## Transformation and Polynomial fitting
