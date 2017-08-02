@@ -66,19 +66,21 @@ Eigen::VectorXd polyfit(Eigen::VectorXd xvals, Eigen::VectorXd yvals,
 }
 
 
-// In vehicle coordinates the cross-track error error cte is 
+// In vehicle coordinates the cross-track error error cte is
   // the intercept at x = 0
   double evaluateCte(Eigen::VectorXd coeffs) {
-    return polyeval(coeffs, 0);  
+    return polyeval(coeffs, 0);
   }
 
-  // In vehicle coordinates the orientation error epsi is 
+  // In vehicle coordinates the orientation error epsi is
   // -atan(c1 + c2*x + c3* x^2), but the car is always at x=0.
   double evaluateEpsi(Eigen::VectorXd coeffs) {
-    return -atan(coeffs[1]);  
+    return -atan(coeffs[1]);
   }
 
-
+//Convert from World Coordinates to Vehicle Coordinates system
+//Copied from
+//https://github.com/ksakmann/CarND-MPC-Project
  Eigen::MatrixXd transformGlobalToLocal(double x, double y, double psi, const vector<double> & ptsx, const vector<double> & ptsy) {
 
     assert(ptsx.size() == ptsy.size());
@@ -88,8 +90,8 @@ Eigen::VectorXd polyfit(Eigen::VectorXd xvals, Eigen::VectorXd yvals,
 
     for (auto i=0; i<len ; ++i){
       waypoints(0,i) =   cos(psi) * (ptsx[i] - x) + sin(psi) * (ptsy[i] - y);
-      waypoints(1,i) =  -sin(psi) * (ptsx[i] - x) + cos(psi) * (ptsy[i] - y);  
-    } 
+      waypoints(1,i) =  -sin(psi) * (ptsx[i] - x) + cos(psi) * (ptsy[i] - y);
+    }
 
     return waypoints;
 
@@ -126,7 +128,7 @@ int main() {
           double v = j[1]["speed"];
 
 
-          // Affine transformation. Translate to car coordinate system then rotate to the car's orientation. 
+          // Affine transformation. Translate to car coordinate system then rotate to the car's orientation.
           // Local coordinates take capital letters. The reference trajectory in local coordinates:
           Eigen::MatrixXd waypoints = transformGlobalToLocal(px,py,psi,ptsx,ptsy);
           Eigen::VectorXd Ptsx = waypoints.row(0);
@@ -135,7 +137,7 @@ int main() {
           // fit a 3rd order polynomial to the waypoints
           auto coeffs = polyfit(Ptsx, Ptsy, 3);
 
-          // get cross-track error from fit 
+          // get cross-track error from fit
           double cte = evaluateCte(coeffs);
 
           // get orientation error from fit
@@ -146,7 +148,7 @@ int main() {
           state << 0, 0, 0, v, cte, epsi;
 
 
-          // compute the optimal trajectory          
+          // compute the optimal trajectory
           Solution sol = mpc.Solve(state, coeffs);
 
           /*
@@ -168,7 +170,7 @@ int main() {
           msgJson["steering_angle"] = -steer_value/0.436332;
           msgJson["throttle"] = throttle_value;
 
-          //Display the MPC predicted trajectory 
+          //Display the MPC predicted trajectory
           vector<double> mpc_x_vals;
           vector<double> mpc_y_vals;
 
