@@ -2,11 +2,11 @@
 Self-Driving Car Engineer Nanodegree Program
 
 ---
-#Model Predictive Control (MPC) project - Description
+## Model Predictive Control (MPC) project - Description
 
 Project is to demostrate a Model Predictive Control in Car simulator, where car steers itself on the track and maintains speed. The simulator gives the values of car position and waypoints of the further track in world coordinates and also cars orientation/heading and speed. This information to be used to do MPC to steer the car along the waypoints as reference.
 
-##Model
+## Model
 
 The vehicle model used in this project is same as introduced in the class which is a bicyle model. It neglects all dynamical effects such as inertia, friction and torque. The model takes changes of heading direction into account and is thus non-linear. The model used consists of the following equations
 
@@ -26,18 +26,18 @@ The data from simulator is in World coordinates and hence need to tranformed to 
 
 	'''
 	 X' =   cos(psi) * (ptsx[i] - x) + sin(psi) * (ptsy[i] - y);
-	 Y' =  -sin(psi) * (ptsx[i] - x) + cos(psi) * (ptsy[i] - y);  
+	 Y' =  -sin(psi) * (ptsx[i] - x) + cos(psi) * (ptsy[i] - y);
 	'''
 
 where X',Y' denote coordinates in the vehicle coordinate system.
 
-We try to fit a third order polynomial on those waypoint from the simulator after converting it to vehicle coordinates. Thus get the coeffs. Also as the car is always at <0, 0> in vehicle coordinate system and its heading is postive x axis of vehicle coordinate system, the x, y and psi for initial state be zero. Hence the initial state is 
+We try to fit a third order polynomial on those waypoint from the simulator after converting it to vehicle coordinates. Thus get the coeffs. Also as the car is always at <0, 0> in vehicle coordinate system and its heading is postive x axis of vehicle coordinate system, the x, y and psi for initial state be zero. Hence the initial state is
 
 	'''
 	state << 0, 0, 0, v, cte, epsi;
 	'''
 
-##HyperParamter Selection
+## HyperParamter Selection
 
 ### N and dt choice and accounting 100ms latency
 The values of 25 and 0.05 are choosen for N and dt respectively, considering that the longer the prediction better is the stability of the maneaover of the car. Also given the that N*dt should also cover the 100ms duration for the latency of the actuation.
@@ -45,17 +45,17 @@ The values of 25 and 0.05 are choosen for N and dt respectively, considering tha
 ### Cost Function
 For smoother maneavering an ref velocity of 35mph is choosen and also overall cost is computed as below accounting for smoother transistions between different timesteps:
 	'''
-Cost  = Sum_i cte(i)^2 
-              + epsi(i)^2 
-              + (v(i)-v_ref)^2 + delta(i)^2 
-              + 10 a(i)^2 
-              + 600 [delta(i+1)-delta(i)] 
+Cost  = Sum_i cte(i)^2
+              + epsi(i)^2
+              + (v(i)-v_ref)^2 + delta(i)^2
+              + 10 a(i)^2
+              + 600 [delta(i+1)-delta(i)]
               + [a(i+1)-a(i)]
 	'''
 
 
 
- 
+
 
 
 
@@ -76,7 +76,7 @@ Cost  = Sum_i cte(i)^2
   * Run either `install-mac.sh` or `install-ubuntu.sh`.
   * If you install from source, checkout to commit `e94b6e1`, i.e.
     ```
-    git clone https://github.com/uWebSockets/uWebSockets 
+    git clone https://github.com/uWebSockets/uWebSockets
     cd uWebSockets
     git checkout e94b6e1
     ```
@@ -99,7 +99,7 @@ Cost  = Sum_i cte(i)^2
        per this [forum post](https://discussions.udacity.com/t/incorrect-checksum-for-freed-object/313433/19).
   * Linux
     * You will need a version of Ipopt 3.12.1 or higher. The version available through `apt-get` is 3.11.x. If you can get that version to work great but if not there's a script `install_ipopt.sh` that will install Ipopt. You just need to download the source from the Ipopt [releases page](https://www.coin-or.org/download/source/Ipopt/) or the [Github releases](https://github.com/coin-or/Ipopt/releases) page.
-    * Then call `install_ipopt.sh` with the source directory as the first argument, ex: `sudo bash install_ipopt.sh Ipopt-3.12.1`. 
+    * Then call `install_ipopt.sh` with the source directory as the first argument, ex: `sudo bash install_ipopt.sh Ipopt-3.12.1`.
   * Windows: TODO. If you can use the Linux subsystem and follow the Linux instructions.
 * [CppAD](https://www.coin-or.org/CppAD/)
   * Mac: `brew install cppad`
